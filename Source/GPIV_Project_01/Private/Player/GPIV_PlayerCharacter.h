@@ -13,4 +13,10 @@ UCLASS()
 class AGPIV_PlayerCharacter : public AGPIV_CharacterBase
 {
 	GENERATED_BODY()
+
+public:
+	AGPIV_PlayerCharacter();
+
+private:
+	virtual void PawnClientRestart() override;
 };

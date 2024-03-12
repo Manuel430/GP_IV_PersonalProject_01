@@ -2,3 +2,12 @@
 
 
 #include "GPIV_PlayerCharacter.h"
+
+AGPIV_PlayerCharacter::AGPIV_PlayerCharacter()
+{
+}
+
+void AGPIV_PlayerCharacter::PawnClientRestart()
+{
+
+}

@@ -44,12 +44,10 @@ void AGPIV_PlayerCharacter::Move(const FInputActionValue& InputValue)
 	FVector2D input = InputValue.Get<FVector2D>();
 	input.Normalize();
 
-	AddMovementInput(input.Y * GetMoveFwdDir());
+	AddMovementInput(input.X * GetMoveRightDir());
 }
 
-FVector AGPIV_PlayerCharacter::GetMoveFwdDir() const
+FVector AGPIV_PlayerCharacter::GetMoveRightDir() const
 {
-	FVector CameraFwd = ViewCamera->GetForwardVector();
-	CameraFwd.Z = 0;
-	return CameraFwd.GetSafeNormal();
+	return ViewCamera->GetRightVector();
 }

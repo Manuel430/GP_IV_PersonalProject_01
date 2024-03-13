@@ -33,6 +33,7 @@ private:
 	virtual void PawnClientRestart() override;
 
 	/*			Input			*/
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputMappingContext* InputMapping;
 
@@ -44,5 +45,5 @@ private:
 	UFUNCTION()
 	void Move(const FInputActionValue& InputValue);
 
-	FVector GetMoveFwdDir() const;
+	FVector GetMoveRightDir() const;
 };

@@ -6,6 +6,11 @@
 #include "Character/GPIV_CharacterBase.h"
 #include "GPIV_PlayerCharacter.generated.h"
 
+
+class USpringArmComponent;
+class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
 ///**
 // * 
 // */
@@ -18,5 +23,26 @@ public:
 	AGPIV_PlayerCharacter();
 
 private:
+
+	UPROPERTY(visibleAnywhere, Category = "View")
+	USpringArmComponent* CameraBoom;
+
+	UPROPERTY(EditDefaultsOnly, Category = "View")
+	UCameraComponent* ViewCamera;
+
 	virtual void PawnClientRestart() override;
+
+	/*			Input			*/
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputMappingContext* InputMapping;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* MoveInputAction;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
+	void Move(const FInputActionValue& InputValue);
+
+	FVector GetMoveFwdDir() const;
 };

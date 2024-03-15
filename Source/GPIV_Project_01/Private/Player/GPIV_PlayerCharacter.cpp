@@ -38,6 +38,9 @@ void AGPIV_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	{
 		EnhancedInputComp->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Move);
 		EnhancedInputComp->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Jump);
+		EnhancedInputComp->BindAction(SprintInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Sprint);
+		EnhancedInputComp->BindAction(WalkInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Walk);
+		EnhancedInputComp->BindAction(CrouchInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::CrouchInput);
 	}
 }
 
@@ -47,6 +50,32 @@ void AGPIV_PlayerCharacter::Move(const FInputActionValue& InputValue)
 	input.Normalize();
 
 	AddMovementInput(input.X * GetMoveRightDir());
+}
+
+void AGPIV_PlayerCharacter::Sprint(const FInputActionValue& InputValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("I am Sprinting"));
+
+	GetCharacterMovement()->MaxWalkSpeed *= SprintMultiplier;
+}
+
+void AGPIV_PlayerCharacter::Walk(const FInputActionValue& InputValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("I am Walking"));
+
+	GetCharacterMovement()->MaxWalkSpeed /= SprintMultiplier;
+}
+
+void AGPIV_PlayerCharacter::CrouchInput(const FInputActionValue& InputValue)
+{
+	if (GetCharacterMovement()->IsFalling())
+	{
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("I am Crouching"));
+
+	Crouch();
 }
 
 FVector AGPIV_PlayerCharacter::GetMoveRightDir() const

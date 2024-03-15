@@ -43,10 +43,26 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* JumpInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* SprintInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* WalkInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* CrouchInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* StandInputAction;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
 	void Move(const FInputActionValue& InputValue);
+	void Sprint(const FInputActionValue& InputValue);
+	void Walk(const FInputActionValue& InputValue);
+	void CrouchInput(const FInputActionValue& InputValue);
 
 	FVector GetMoveRightDir() const;
+	float SprintMultiplier = 2;
 };

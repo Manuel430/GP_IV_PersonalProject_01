@@ -59,9 +59,18 @@ private:
 
 	UFUNCTION()
 	void Move(const FInputActionValue& InputValue);
+	
+	UFUNCTION()
 	void Sprint(const FInputActionValue& InputValue);
+	
+	UFUNCTION()
 	void Walk(const FInputActionValue& InputValue);
-	void CrouchInput(const FInputActionValue& InputValue);
+	
+	UFUNCTION()
+	void Crouching(const FInputActionValue& InputValue);
+
+	UFUNCTION()
+	void Standing(const FInputActionValue& InputValue);
 
 	FVector GetMoveRightDir() const;
 	float SprintMultiplier = 2;

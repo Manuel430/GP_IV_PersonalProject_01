@@ -55,10 +55,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* StandInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* SlideInputAction;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
 	void Move(const FInputActionValue& InputValue);
+
+	UFUNCTION()
+	void Jumping(const FInputActionValue& InputValue);
 	
 	UFUNCTION()
 	void Sprint(const FInputActionValue& InputValue);
@@ -72,6 +78,38 @@ private:
 	UFUNCTION()
 	void Standing(const FInputActionValue& InputValue);
 
+	UFUNCTION()
+	void Slide(const FInputActionValue& InputValue);
+
 	FVector GetMoveRightDir() const;
 	float SprintMultiplier = 2;
+	bool bIsCrouching;
+
+	/*			Wall Jump			*/
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Walljump")
+	float WallJumpForce = 1000.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Walljump")
+	float WallDetectionDistance = 50.f;
+	
+	bool bCanWallJump = false;
+
+	void CheckWallCollision();
+
+	/*			Sliding			*/
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Slide")
+	float SlideSpeedMultiplier = 2.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Slide")
+	float SlideTime = 5.0f;
+
+	bool bIsSliding = false;
+
+	void StartSlide();
+
+	void StopSlide();
+
 };

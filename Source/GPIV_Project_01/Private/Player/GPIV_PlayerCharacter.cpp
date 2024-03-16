@@ -37,11 +37,12 @@ void AGPIV_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	if (EnhancedInputComp)
 	{
 		EnhancedInputComp->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Move);
-		EnhancedInputComp->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Jump);
+		EnhancedInputComp->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Jumping);
 		EnhancedInputComp->BindAction(SprintInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Sprint);
 		EnhancedInputComp->BindAction(WalkInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Walk);
 		EnhancedInputComp->BindAction(CrouchInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Crouching);
 		EnhancedInputComp->BindAction(StandInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Standing);
+		EnhancedInputComp->BindAction(SlideInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Slide);
 	}
 }
 
@@ -51,6 +52,24 @@ void AGPIV_PlayerCharacter::Move(const FInputActionValue& InputValue)
 	input.Normalize();
 
 	AddMovementInput(input.X * GetMoveRightDir());
+}
+
+void AGPIV_PlayerCharacter::Jumping(const FInputActionValue& InputValue)
+{
+	if (bCanWallJump)
+	{
+		FVector JumpDirection = GetActorUpVector() + GetActorForwardVector();
+		JumpDirection.Normalize();
+
+		LaunchCharacter(JumpDirection * WallJumpForce, false, true);
+		bCanWallJump = false;
+	}
+	else
+	{
+		Jump();
+	}
+
+	CheckWallCollision();
 }
 
 void AGPIV_PlayerCharacter::Sprint(const FInputActionValue& InputValue)
@@ -72,6 +91,7 @@ void AGPIV_PlayerCharacter::Crouching(const FInputActionValue& InputValue)
 		return;
 	}
 
+	bIsCrouching = true;
 	Crouch();
 }
 
@@ -82,10 +102,83 @@ void AGPIV_PlayerCharacter::Standing(const FInputActionValue& InputValue)
 		return;
 	}
 
+	bIsCrouching = false;
 	UnCrouch();
+}
+
+void AGPIV_PlayerCharacter::Slide(const FInputActionValue& InputValue)
+{
+	if (!bIsCrouching)
+	{
+		return;
+	}
+	
+	if (!bIsSliding && bIsCrouching)
+	{
+		StartSlide();
+	}
 }
 
 FVector AGPIV_PlayerCharacter::GetMoveRightDir() const
 {
 	return ViewCamera->GetRightVector();
+}
+
+void AGPIV_PlayerCharacter::CheckWallCollision()
+{
+	FVector Start = GetActorLocation() + GetActorForwardVector();
+	FVector End = Start + GetActorForwardVector() * WallDetectionDistance;
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_WorldStatic, CollisionParams);
+
+	if (bHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Distance to wall: %f"), HitResult.Distance);
+	}
+
+	if (bHit && HitResult.Distance <= WallDetectionDistance)
+	{
+		bCanWallJump = true;
+	}
+	else
+	{
+		bCanWallJump = false;
+	}
+}
+
+void AGPIV_PlayerCharacter::StartSlide()
+{
+	if (!bIsSliding)
+	{
+		bIsSliding = true;
+
+		GetCharacterMovement()->MaxWalkSpeedCrouched *= SlideSpeedMultiplier;
+	}
+
+	while (bIsSliding)
+	{
+		Crouch();
+		
+		SlideTime -= 1.0f;
+
+		if (SlideTime <= 0)
+		{
+			StopSlide();
+		}
+	}
+}
+
+void AGPIV_PlayerCharacter::StopSlide()
+{
+	if (bIsSliding)
+	{
+		bIsSliding = false;
+
+		GetCharacterMovement()->MaxWalkSpeedCrouched /= SlideSpeedMultiplier;
+
+		SlideTime = 5.0f;
+	}
 }

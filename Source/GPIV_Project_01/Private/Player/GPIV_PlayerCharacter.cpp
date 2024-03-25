@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Framework/GPIV_AnimInstance.h"
 
 AGPIV_PlayerCharacter::AGPIV_PlayerCharacter()
 {
@@ -92,6 +93,7 @@ void AGPIV_PlayerCharacter::Crouching(const FInputActionValue& InputValue)
 	}
 
 	bIsCrouching = true;
+	//PlayerAnimation->GetCrouch(bIsCrouching);
 	Crouch();
 }
 
@@ -103,6 +105,7 @@ void AGPIV_PlayerCharacter::Standing(const FInputActionValue& InputValue)
 	}
 
 	bIsCrouching = false;
+	//PlayerAnimation->GetCrouch(bIsCrouching);
 	UnCrouch();
 }
 
@@ -122,6 +125,11 @@ void AGPIV_PlayerCharacter::Slide(const FInputActionValue& InputValue)
 FVector AGPIV_PlayerCharacter::GetMoveRightDir() const
 {
 	return ViewCamera->GetRightVector();
+}
+
+bool AGPIV_PlayerCharacter::GetCrouch()
+{
+	return bIsCrouching;
 }
 
 void AGPIV_PlayerCharacter::CheckWallCollision()

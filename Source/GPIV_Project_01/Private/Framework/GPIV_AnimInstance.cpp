@@ -4,6 +4,12 @@
 #include "Framework/GPIV_AnimInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/GPIV_PlayerCharacter.h"
+
+void UGPIV_AnimInstance::GetCrouch(bool crouching)
+{
+	bIsCrouching = crouching;
+}
 
 void UGPIV_AnimInstance::NativeInitializeAnimation()
 {
@@ -23,4 +29,9 @@ void UGPIV_AnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 		Speed = OwnerCharacter->GetVelocity().Length();
 		bIsJumping = OwnerMovementComp->IsFalling();
 	}
+}
+
+void UGPIV_AnimInstance::SetCrouch()
+{
+	bIsCrouching = OwnerMovementComp->IsCrouching();
 }

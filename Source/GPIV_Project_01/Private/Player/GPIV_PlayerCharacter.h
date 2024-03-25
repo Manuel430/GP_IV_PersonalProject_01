@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UGPIV_AnimInstance;
 ///**
 // * 
 // */
@@ -85,6 +86,10 @@ private:
 	float SprintMultiplier = 2;
 	bool bIsCrouching;
 
+public:
+
+	bool GetCrouch();
+
 	/*			Wall Jump			*/
 
 private:
@@ -112,4 +117,6 @@ private:
 
 	void StopSlide();
 
+	/*			Animation			*/
+	UGPIV_AnimInstance* PlayerAnimation;
 };

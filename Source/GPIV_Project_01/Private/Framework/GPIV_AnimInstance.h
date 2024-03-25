@@ -8,6 +8,7 @@
 
 class ACharacter;
 class UCharacterMovementComponent;
+class AGPIV_PlayerCharacter;
 /**
  * 
  */
@@ -32,14 +33,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	bool IsOnGround() const { return !bIsJumping; }
 
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	bool IsCrouching() const { return bIsCrouching; }
+
+	void GetCrouch(bool crouching);
+
 private:
 	virtual void NativeInitializeAnimation() override;
 
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
+
+	void SetCrouch();
 
 	const ACharacter* OwnerCharacter;
 	const UCharacterMovementComponent* OwnerMovementComp;
 
 	float Speed;
 	bool bIsJumping;
+	bool bIsCrouching;
 };

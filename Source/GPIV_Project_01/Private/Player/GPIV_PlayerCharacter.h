@@ -84,9 +84,10 @@ private:
 
 	FVector GetMoveRightDir() const;
 	float SprintMultiplier = 2;
-	bool bIsCrouching;
 
 public:
+
+	bool bIsCrouching;
 
 	bool GetCrouch();
 

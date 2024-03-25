@@ -28,10 +28,6 @@ void UGPIV_AnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	{
 		Speed = OwnerCharacter->GetVelocity().Length();
 		bIsJumping = OwnerMovementComp->IsFalling();
+		bIsCrouching = OwnerMovementComp->IsCrouching();
 	}
-}
-
-void UGPIV_AnimInstance::SetCrouch()
-{
-	bIsCrouching = OwnerMovementComp->IsCrouching();
 }

@@ -43,10 +43,9 @@ private:
 
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
 
-	void SetCrouch();
-
 	const ACharacter* OwnerCharacter;
 	const UCharacterMovementComponent* OwnerMovementComp;
+	const AGPIV_PlayerCharacter* PlayerCharacter;
 
 	float Speed;
 	bool bIsJumping;

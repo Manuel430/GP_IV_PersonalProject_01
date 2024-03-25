@@ -44,6 +44,8 @@ void AGPIV_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComp->BindAction(CrouchInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Crouching);
 		EnhancedInputComp->BindAction(StandInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Standing);
 		EnhancedInputComp->BindAction(SlideInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Slide);
+		EnhancedInputComp->BindAction(TurnRightInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::TurnRight);
+		EnhancedInputComp->BindAction(TurnLeftInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::TurnLeft);
 	}
 }
 
@@ -93,7 +95,6 @@ void AGPIV_PlayerCharacter::Crouching(const FInputActionValue& InputValue)
 	}
 
 	bIsCrouching = true;
-	//PlayerAnimation->GetCrouch(bIsCrouching);
 	Crouch();
 }
 
@@ -105,7 +106,6 @@ void AGPIV_PlayerCharacter::Standing(const FInputActionValue& InputValue)
 	}
 
 	bIsCrouching = false;
-	//PlayerAnimation->GetCrouch(bIsCrouching);
 	UnCrouch();
 }
 
@@ -122,6 +122,28 @@ void AGPIV_PlayerCharacter::Slide(const FInputActionValue& InputValue)
 	}
 }
 
+void AGPIV_PlayerCharacter::TurnRight(const FInputActionValue& InputValue)
+{
+	FRotator NewRotator = FRotator::ZeroRotator;
+	NewRotator.Yaw = 90;
+
+	if (GetMesh())
+	{
+		GetMesh()->SetWorldRotation(NewRotator);
+	}
+}
+
+void AGPIV_PlayerCharacter::TurnLeft(const FInputActionValue& InputValue)
+{
+	FRotator NewRotator = FRotator::ZeroRotator;
+	NewRotator.Yaw = -90;
+
+	if (GetMesh())
+	{
+		GetMesh()->SetWorldRotation(NewRotator);
+	}
+}
+
 FVector AGPIV_PlayerCharacter::GetMoveRightDir() const
 {
 	return ViewCamera->GetRightVector();
@@ -134,20 +156,37 @@ bool AGPIV_PlayerCharacter::GetCrouch()
 
 void AGPIV_PlayerCharacter::CheckWallCollision()
 {
-	FVector Start = GetActorLocation() + GetActorForwardVector();
-	FVector End = Start + GetActorForwardVector() * WallDetectionDistance;
+	FVector Start = GetMesh()->GetComponentLocation();
+	FVector End = Start + GetMesh()->GetForwardVector() * WallDetectionDistance;
 
-	FHitResult HitResult;
+	TArray<FHitResult> HitResults;
 	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_WorldStatic, CollisionParams);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Emerald, true);
+
+	bool bHit = GetWorld()->LineTraceMultiByChannel(HitResults, Start, End, ECC_WorldStatic, CollisionParams);
+	float Distance = TNumericLimits<float>::Max();
+
+	for (const FHitResult& result : HitResults)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s"), *result.GetActor()->GetName());
+
+		if (result.GetActor() != this)
+		{
+			if (result.Distance < Distance)
+			{
+				Distance = result.Distance;
+			}
+		}
+	}
 
 	if (bHit)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Distance to wall: %f"), HitResult.Distance);
+		UE_LOG(LogTemp, Warning, TEXT("Distance to wall: %f"), Distance);
 	}
 
-	if (bHit && HitResult.Distance <= WallDetectionDistance)
+	if (bHit && Distance <= WallDetectionDistance)
 	{
 		bCanWallJump = true;
 	}

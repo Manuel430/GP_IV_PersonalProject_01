@@ -12,6 +12,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UGPIV_AnimInstance;
+class USkeletalMeshComponent;
 ///**
 // * 
 // */
@@ -30,6 +31,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "View")
 	UCameraComponent* ViewCamera;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Rotate")
+	USkeletalMeshComponent* PlayerBody;
 
 	virtual void PawnClientRestart() override;
 
@@ -59,6 +63,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* SlideInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* TurnRightInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* TurnLeftInputAction;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
@@ -81,6 +91,12 @@ private:
 
 	UFUNCTION()
 	void Slide(const FInputActionValue& InputValue);
+
+	UFUNCTION()
+	void TurnRight(const FInputActionValue& InputValue);
+
+	UFUNCTION()
+	void TurnLeft(const FInputActionValue& InputValue);
 
 	FVector GetMoveRightDir() const;
 	float SprintMultiplier = 2;

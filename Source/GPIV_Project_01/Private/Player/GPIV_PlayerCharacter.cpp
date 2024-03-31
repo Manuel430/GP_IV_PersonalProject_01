@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Framework/GPIV_AnimInstance.h"
+#include "Framework/GPIV_GameMode.h"
 
 AGPIV_PlayerCharacter::AGPIV_PlayerCharacter()
 {
@@ -180,4 +181,9 @@ void AGPIV_PlayerCharacter::CheckWallCollision()
 	{
 		bCanWallJump = false;
 	}
+}
+
+void AGPIV_PlayerCharacter::AddRing()
+{
+	GameMode->AddRing();
 }

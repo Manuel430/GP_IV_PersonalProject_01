@@ -35,6 +35,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Rotate")
 	USkeletalMeshComponent* PlayerBody;
 
+	UPROPERTY(VisibleInstanceOnly)
+	class AGPIV_GameMode* GameMode;
+
 	virtual void PawnClientRestart() override;
 
 	/*			Input			*/
@@ -116,4 +119,9 @@ private:
 
 	/*			Animation			*/
 	UGPIV_AnimInstance* PlayerAnimation;
+
+	/*			Coins			*/
+public:
+	UFUNCTION()
+	void AddRing();
 };

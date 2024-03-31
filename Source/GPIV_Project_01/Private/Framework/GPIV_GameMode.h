@@ -14,4 +14,14 @@ class AGPIV_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(VisibleAnywhere)
+	int32 TotalRings = 0;
+
+	UFUNCTION(Exec, Category = "Commands")
+	void AddRings(int32 NumRings);
+
+	UFUNCTION(BlueprintCallable)
+	void AddRing();
+
 };

@@ -61,9 +61,6 @@ private:
 	UInputAction* StandInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* SlideInputAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* TurnRightInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -88,9 +85,6 @@ private:
 
 	UFUNCTION()
 	void Standing(const FInputActionValue& InputValue);
-
-	UFUNCTION()
-	void Slide(const FInputActionValue& InputValue);
 
 	UFUNCTION()
 	void TurnRight(const FInputActionValue& InputValue);
@@ -119,20 +113,6 @@ private:
 	bool bCanWallJump = false;
 
 	void CheckWallCollision();
-
-	/*			Sliding			*/
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Slide")
-	float SlideSpeedMultiplier = 2.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Slide")
-	float SlideTime = 5.0f;
-
-	bool bIsSliding = false;
-
-	void StartSlide();
-
-	void StopSlide();
 
 	/*			Animation			*/
 	UGPIV_AnimInstance* PlayerAnimation;

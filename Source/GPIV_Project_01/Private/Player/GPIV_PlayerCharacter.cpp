@@ -43,7 +43,6 @@ void AGPIV_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComp->BindAction(WalkInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Walk);
 		EnhancedInputComp->BindAction(CrouchInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Crouching);
 		EnhancedInputComp->BindAction(StandInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Standing);
-		EnhancedInputComp->BindAction(SlideInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::Slide);
 		EnhancedInputComp->BindAction(TurnRightInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::TurnRight);
 		EnhancedInputComp->BindAction(TurnLeftInputAction, ETriggerEvent::Triggered, this, &AGPIV_PlayerCharacter::TurnLeft);
 	}
@@ -109,19 +108,6 @@ void AGPIV_PlayerCharacter::Standing(const FInputActionValue& InputValue)
 	UnCrouch();
 }
 
-void AGPIV_PlayerCharacter::Slide(const FInputActionValue& InputValue)
-{
-	if (!bIsCrouching)
-	{
-		return;
-	}
-	
-	if (!bIsSliding && bIsCrouching)
-	{
-		StartSlide();
-	}
-}
-
 void AGPIV_PlayerCharacter::TurnRight(const FInputActionValue& InputValue)
 {
 	FRotator NewRotator = FRotator::ZeroRotator;
@@ -163,7 +149,7 @@ void AGPIV_PlayerCharacter::CheckWallCollision()
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
-	DrawDebugLine(GetWorld(), Start, End, FColor::Emerald, true);
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Emerald, true);
 
 	bool bHit = GetWorld()->LineTraceMultiByChannel(HitResults, Start, End, ECC_WorldStatic, CollisionParams);
 	float Distance = TNumericLimits<float>::Max();
@@ -193,39 +179,5 @@ void AGPIV_PlayerCharacter::CheckWallCollision()
 	else
 	{
 		bCanWallJump = false;
-	}
-}
-
-void AGPIV_PlayerCharacter::StartSlide()
-{
-	if (!bIsSliding)
-	{
-		bIsSliding = true;
-
-		GetCharacterMovement()->MaxWalkSpeedCrouched *= SlideSpeedMultiplier;
-	}
-
-	while (bIsSliding)
-	{
-		Crouch();
-		
-		SlideTime -= 1.0f;
-
-		if (SlideTime <= 0)
-		{
-			StopSlide();
-		}
-	}
-}
-
-void AGPIV_PlayerCharacter::StopSlide()
-{
-	if (bIsSliding)
-	{
-		bIsSliding = false;
-
-		GetCharacterMovement()->MaxWalkSpeedCrouched /= SlideSpeedMultiplier;
-
-		SlideTime = 5.0f;
 	}
 }

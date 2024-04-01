@@ -10,7 +10,9 @@ void AGPIV_GameMode::AddRing()
 {
 	TotalRings += 1;
 
-	UE_LOG(LogTemp, Warning, TEXT("TOTAL RINGS: %d"), TotalRings);
+	OnRingsCountChanged.Broadcast(TotalRings);
+
+	//UE_LOG(LogTemp, Warning, TEXT("TOTAL RINGS: %d"), TotalRings);
 }
 
 void AGPIV_GameMode::BeginPlay()
@@ -20,5 +22,6 @@ void AGPIV_GameMode::BeginPlay()
 	GameHUD = Cast<UGPIV_GameHUDWidget>(CreateWidget(GetWorld(), GameHUDClass));
 	check(GameHUD);
 
+	GameHUD->InitializeHUD(this);
 	GameHUD->AddToViewport();
 }

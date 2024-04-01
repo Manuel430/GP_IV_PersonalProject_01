@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Framework/GPIV_GameMode.h"
 #include "Blueprint/UserWidget.h"
 #include "GPIV_GameHUDWidget.generated.h"
 
@@ -19,10 +21,10 @@ protected:
 	class UTextBlock* RingCount;
 
 public:
-	//UFUNCTION(BlueprintCallable)
-	//void InitializeHUD(AGPIV_GameMode* GameMode);
+	UFUNCTION(BlueprintCallable)
+	void InitializeHUD(AGPIV_GameMode* GameMode);
 
-	//UFUNCTION(BlueprintCallable)
-	//void SetRingsCount(int32 Count);
+	UFUNCTION(BlueprintCallable)
+	void SetRingsCount(const int32 Count);
 	
 };

@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "GPIV_GameMode.generated.h"
 
+class UUSerWidget;
+
 /**
  * 
  */
@@ -15,6 +17,9 @@ class AGPIV_GameMode : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
+
+	UPROPERTY(EditAnywhere, Category = "Config")
+		TSubclassOf<UUserWidget> GameHUDClass;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 TotalRings = 0;

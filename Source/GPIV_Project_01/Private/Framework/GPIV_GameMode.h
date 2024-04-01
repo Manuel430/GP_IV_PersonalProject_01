@@ -8,6 +8,8 @@
 
 class UUSerWidget;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRingsCountChanged, int32, RingsCount);
+
 /**
  * 
  */
@@ -19,12 +21,21 @@ class AGPIV_GameMode : public AGameModeBase
 public:
 
 	UPROPERTY(EditAnywhere, Category = "Config")
-		TSubclassOf<UUserWidget> GameHUDClass;
+	TSubclassOf<UUserWidget> GameHUDClass;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	class UGPIV_GameHUDWidget* GameHUD;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 TotalRings = 0;
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegates")
+	FOnRingsCountChanged OnRingsCountChanged;
+
 	UFUNCTION(BlueprintCallable)
 	void AddRing();
+
+protected:
+	virtual void BeginPlay() override;
 
 };

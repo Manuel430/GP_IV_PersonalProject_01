@@ -17,11 +17,12 @@ void AGPIV_GameMode::AddRing()
 
 void AGPIV_GameMode::BeginPlay()
 {
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = false;
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
 
 	GameHUD = Cast<UGPIV_GameHUDWidget>(CreateWidget(GetWorld(), GameHUDClass));
 	check(GameHUD);
 
 	GameHUD->InitializeHUD(this);
 	GameHUD->AddToViewport();
+
 }

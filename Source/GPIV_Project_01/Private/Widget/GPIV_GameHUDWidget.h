@@ -20,6 +20,14 @@ protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* RingCount;
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* QuitButton;
+
+	UFUNCTION()
+	void OnQuitClick();
+
+	virtual void NativeConstruct() override;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void InitializeHUD(AGPIV_GameMode* GameMode);

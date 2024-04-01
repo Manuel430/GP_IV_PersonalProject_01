@@ -24,6 +24,9 @@ class AGPIV_PlayerCharacter : public AGPIV_CharacterBase
 public:
 	AGPIV_PlayerCharacter();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 
 	UPROPERTY(visibleAnywhere, Category = "View")
@@ -35,7 +38,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Rotate")
 	USkeletalMeshComponent* PlayerBody;
 
-	UPROPERTY(VisibleInstanceOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "GameMode")
 	class AGPIV_GameMode* GameMode;
 
 	virtual void PawnClientRestart() override;

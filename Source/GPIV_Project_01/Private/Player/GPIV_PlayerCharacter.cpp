@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Framework/GPIV_AnimInstance.h"
 #include "Framework/GPIV_GameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 AGPIV_PlayerCharacter::AGPIV_PlayerCharacter()
 {
@@ -17,6 +18,13 @@ AGPIV_PlayerCharacter::AGPIV_PlayerCharacter()
 
 	CameraBoom->SetupAttachment(GetRootComponent());
 	ViewCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+}
+
+void AGPIV_PlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	GameMode = Cast<AGPIV_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	check(GameMode);
 }
 
 void AGPIV_PlayerCharacter::PawnClientRestart()

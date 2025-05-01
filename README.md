@@ -137,3 +137,52 @@ void UGPIV_GameHUDWidget::SetRingsCount(const int32 Count)
 	RingCount->SetText(FText::AsNumber(Count));
 }
 ```
+
+As the rings spin around as an animation, when the player enters their area of the OnSphereOverlap, it will cast its own PlayerCharacter to the player and use their AddRing() Function, which calls to the GameMode to use their AddRing() function, adding one ring into its counter and brodcasting the OnRingsCountChange Delegate to the GameHUDWidgetm adding to the SetRingsCount() to add the updated count to the screen.
+```cpp
+void AGPIV_RingItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AGPIV_PlayerCharacter* PlayerCharacter = Cast<AGPIV_PlayerCharacter>(OtherActor);
+
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->AddRing();
+
+		Destroy();
+
+	}
+}
+```
+
+```cpp
+void AGPIV_PlayerCharacter::AddRing()
+{
+	GameMode->AddRing();
+}
+```
+
+```cpp
+void AGPIV_GameMode::AddRing()
+{
+	TotalRings += 1;
+
+	OnRingsCountChanged.Broadcast(TotalRings);
+}
+```
+
+```cpp
+void UGPIV_GameHUDWidget::InitializeHUD(AGPIV_GameMode* GameMode)
+{
+	if (GameMode)
+	{
+		RingCount->SetText(FText::AsNumber(0));
+
+		GameMode->OnRingsCountChanged.AddDynamic(this, &UGPIV_GameHUDWidget::SetRingsCount);
+	}
+}
+
+void UGPIV_GameHUDWidget::SetRingsCount(const int32 Count)
+{
+	RingCount->SetText(FText::AsNumber(Count));
+}
+```
